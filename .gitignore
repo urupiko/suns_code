@@ -1,0 +1,6 @@
+__pycache__
+
+config.py
+.DS_Store
+token.pickle
+client_secrets.json
