@@ -1,0 +1,27 @@
+{
+    "title" : "テスト大会",
+    "date" : "テスト",
+    "venue" : "体育館",
+    "games" : [
+        {
+           "dirname" : "game",
+           "friend" : "自チーム名",
+           "opponent" : "対戦チーム名",
+            "score" : "4-1",
+            "chapters" : [
+                {
+                    "file" : "00000.MTS",
+                    "text" : "チャプター1"
+                },
+                {
+                    "file" : "00001.MTS",
+                    "text" : "チャプター2"
+                },
+                {
+                    "file" : "00002.MTS",
+                    "text" : "チャプター3"
+                }
+            ]
+        }    
+    ]
+}
