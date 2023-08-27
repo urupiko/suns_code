@@ -25,7 +25,6 @@ RETRIABLE_EXCEPTIONS = (httplib2.HttpLib2Error,
                         http.client.ResponseNotReady,
                         http.client.BadStatusLine)
 RETRIABLE_STATUS_CODES = [500, 502, 503, 504]
-CLIENT_SECRETS_FILE = "client_secrets.json"
 YOUTUBE_UPLOAD_SCOPE = ["https://www.googleapis.com/auth/youtube.upload", "https://www.googleapis.com/auth/youtubepartner"]
 YOUTUBE_API_SERVICE_NAME = "youtube"
 YOUTUBE_API_VERSION = "v3"
@@ -43,7 +42,7 @@ def get_authenticated_service():
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                CLIENT_SECRETS_FILE, YOUTUBE_UPLOAD_SCOPE)
+                config.CLIENT_SECRETS_FILE, YOUTUBE_UPLOAD_SCOPE)
             creds = flow.run_local_server(port=0)
 
         with open('token.pickle', 'wb') as token:
