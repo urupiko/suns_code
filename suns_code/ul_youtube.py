@@ -76,7 +76,7 @@ def initialize_upload(youtube, options):
 
     video_id = resumable_upload(insert_request)
 
-    if video_id is not None:
+    if video_id is not None and config.PLAYLIST_ID is not None:
         insert_request = youtube.playlistItems().insert(
             part="snippet",
             body={
