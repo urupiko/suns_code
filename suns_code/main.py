@@ -2,7 +2,6 @@ import os
 import errno
 import json
 import argparse
-import sys
 
 import ul_thumbnail
 import ul_youtube
@@ -36,7 +35,7 @@ for game in meta['games']:
     chapterfile = os.path.join(gamedir, 'chapter.txt')
 
     if mode == 'mkdir':
-        os.makedirs(os.path.join(basedir, game['dirname']), exist_ok=True)
+        os.makedirs(gamedir, exist_ok=True)
         print(game['dirname'] + ' is created')
 
     outfile_path = os.path.join(basedir, game['dirname']+'.mp4')
@@ -59,7 +58,7 @@ for game in meta['games']:
     if mode == 'upload':
         if not os.path.isfile(chapterfile):
             continue
-        with open(chapterfile, 'r', encoding='UTF-8'):
+        with open(chapterfile, 'r', encoding='UTF-8') as f:
             description = f.read()
         options = dict(
             file = outfile_path,
@@ -81,7 +80,7 @@ for game in meta['games']:
             json.dump(info, f, ensure_ascii=False, indent=4, sort_keys=True)
 
     if mode == 'create_thumbnail':
-        ul_thumbnail.create_thumbnail(os.path.join(basedir, game['dirname']))
+        ul_thumbnail.create_thumbnail(gamedir)
 
     if mode == 'upload_thumbnail':
-        ul_youtube.upload_thumbnail(os.path.join(basedir, game['dirname']))
+        ul_youtube.upload_thumbnail(gamedir)
