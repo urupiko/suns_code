@@ -5,6 +5,7 @@ import datetime
 import json
 import math
 import shutil
+import config
 import ul_ffmpeg
 
 parser = argparse.ArgumentParser()
@@ -39,6 +40,9 @@ mts_index = 0
 for i in range(1, args.num_games+1):
     game = {}
     game['dirname'] = f"game{i}"
+    game['friend'] = config.FRIEND_TEAM_NAME
+    game['opponent'] = "対戦チーム名"
+    game['score'] = "0-0"
     game['chapters'] = []
     chapter_index = 1
     last_mtime = 0
