@@ -8,19 +8,17 @@ import ul_youtube
 import ul_ffmpeg
 
 parser = argparse.ArgumentParser()
-parser.add_argument("src_dir", type=str, help="Source directroy e.g. 20210606")
-parser.add_argument("mode", type=str, help="create_thumbnail/upload_thumbnail/mkdir/conv/upload")
+parser.add_argument("target_dir", type=str, help="Target directroy e.g. 20210606")
+parser.add_argument("mode", type=str, help="create_thumbnail/upload_thumbnail/conv/upload")
 args = parser.parse_args()
 
-target = args.src_dir #'20210606'
+target = args.target_dir #'20210606'
 mode = args.mode
 if not os.path.isdir(target):
     raise FileNotFoundError (errno.ENOENT, os.strerror(errno.ENOENT), target)
 basedir = os.path.join(os.getcwd(), target)
 metafile = os.path.join(basedir, 'meta.json')
 
-print('getcwd   : ', os.getcwd())
-print("__file__ : ", __file__)
 print("metafile : ", metafile)
 
 with open(metafile, encoding='utf-8') as f:
@@ -33,10 +31,6 @@ for game in meta['games']:
 
     gamedir = os.path.join(basedir, game['dirname'])
     chapterfile = os.path.join(gamedir, 'chapter.txt')
-
-    if mode == 'mkdir':
-        os.makedirs(gamedir, exist_ok=True)
-        print(game['dirname'] + ' is created')
 
     outfile_path = os.path.join(basedir, game['dirname']+'.mp4')
     title = meta['date'] + ' ' + meta['title'] + ' ' + game['opponent']
