@@ -6,11 +6,11 @@
             "type": "python",
             "request": "launch",
             "program": "${file}",
-            "console": "integratedTerminal",
+            "console": "internalConsole",
             "justMyCode": true,
             "args": [
-                "../data/20230819/game4",
-                // "create_thumbnail"
+                "/Users/uruc/Desktop/w/suns/20230823",
+                "upload"
             ]
         }
     ]
