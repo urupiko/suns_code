@@ -141,6 +141,9 @@ def upload_video(options):
 
 def upload_thumbnail(target):
     infofile = os.path.join(target, 'info.json')
+    if not os.path.exists(infofile):
+        print(f"{infofile}. is not found")
+        return
     with open(infofile, encoding='utf-8') as f:
         info = json.load(f)
 
