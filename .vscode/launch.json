@@ -9,8 +9,11 @@
             "console": "internalConsole",
             "justMyCode": true,
             "args": [
-                "/Users/uruc/Desktop/w/suns/20230823",
-                "upload"
+                // "/Users/uruc/Desktop/w/suns/testdir",
+                // "upload"
+                "/Users/uruc/Desktop/w/suns/copydir",
+                "/Users/uruc/Desktop/w/suns/testdir",
+                "2"
             ]
         }
     ]
