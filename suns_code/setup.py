@@ -7,6 +7,9 @@ import math
 import shutil
 import config
 import ul_ffmpeg
+import logging
+
+# logging.basicConfig(level=logging.INFO)
 
 parser = argparse.ArgumentParser()
 parser.add_argument("src_dir", type=str, help="Source directroy e.g. sdcard")
@@ -22,8 +25,7 @@ mode = args.mode
 os.makedirs(target, exist_ok=True)
 
 metafile = os.path.join(target, 'meta.json')
-
-# print("metafile : ", metafile)
+logging.info("metafile : " +  metafile)
 
 # 全体メタ情報
 meta = {}
@@ -71,8 +73,7 @@ for i in range(1, args.num_games+1):
         game['chapters'].append(chapter)
         last_mtime = mtime
         mts_index += 1
-        # デバッグ出力
-        # print(chapter['file'] + ' ' + chapter['mtime'] + ' ' + datetime.datetime.fromtimestamp(last_mtime).strftime('%Y-%m-%d %H:%M:%S'))
+        logging.info(chapter['file'] + ' ' + chapter['mtime'] + ' ' + datetime.datetime.fromtimestamp(last_mtime).strftime('%Y-%m-%d %H:%M:%S'))
 
         if mode == 'nocopy':
             continue
