@@ -50,29 +50,34 @@ for i in range(1, args.num_games+1):
     for j in range(mts_index, len(mtslist)):
         mts = mtslist[j]
         mtime = os.path.getmtime(mts)
-        # 次の動画への遷移条件は、、前回の動画の終了から10分以上が経過したとする
-        if last_mtime != 0 and mtime - last_mtime > 600:
+        duration_sec = math.ceil(ul_ffmpeg.get_length(mts))
+        elapsed_sec = (mtime-duration_sec) - last_mtime
+        # 次の動画への遷移条件は、前回の動画の終了時(last_mtime)から10分以上が経過したとする
+        if last_mtime != 0 and elapsed_sec > 600:
+            print(f"go to next. elapsed: {elapsed_sec/60} [min]")
             last_mtime = 0
             break
+
+        # チャプター情報を記録
         chapter = {}
         chapter['text'] = f'{chapter_index}Q'
         chapter_index += 1
         chapter['file'] = os.path.basename(mts)
         dt = datetime.datetime.fromtimestamp(mtime)
         chapter['mtime'] = dt.strftime('%Y-%m-%d %H:%M:%S')
-        duration_sec = math.ceil(ul_ffmpeg.get_length(mts))
         chapter['at'] = f'{math.floor(sum_duration/60)}m:{sum_duration%60}s'
         sum_duration += duration_sec
-        td = datetime.timedelta(seconds=duration_sec)
-        # chapter['duration(sec)'] = duration_sec
         chapter['duration'] = f'{math.floor(duration_sec/60)}m:{duration_sec%60}s'
         game['chapters'].append(chapter)
-        last_mtime = mtime + duration_sec
+        last_mtime = mtime
         mts_index += 1
+        # デバッグ出力
+        # print(chapter['file'] + ' ' + chapter['mtime'] + ' ' + datetime.datetime.fromtimestamp(last_mtime).strftime('%Y-%m-%d %H:%M:%S'))
 
         if mode == 'nocopy':
             continue
 
+        # コピー処理を実行
         gamedir = os.path.join(target, game['dirname'])
         os.makedirs(gamedir, exist_ok=True)
         print(f"copying {mts} to {gamedir}")
