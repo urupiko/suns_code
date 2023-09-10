@@ -50,6 +50,9 @@ for i in range(1, args.num_games+1):
     last_mtime = 0
     sum_duration = 0
     for j in range(mts_index, len(mtslist)):
+        # mts       1.....2.....3.....4
+        # mtime          *     *     *
+        # duration  xxxxxx
         mts = mtslist[j]
         mtime = os.path.getmtime(mts)
         duration_sec = math.ceil(ul_ffmpeg.get_length(mts))
@@ -62,14 +65,14 @@ for i in range(1, args.num_games+1):
 
         # チャプター情報を記録
         chapter = {}
-        chapter['text'] = f'{chapter_index}Q'
-        chapter_index += 1
-        chapter['file'] = os.path.basename(mts)
         dt = datetime.datetime.fromtimestamp(mtime)
         chapter['mtime'] = dt.strftime('%Y-%m-%d %H:%M:%S')
         chapter['at'] = f'{math.floor(sum_duration/60)}m:{sum_duration%60}s'
         sum_duration += duration_sec
         chapter['duration'] = f'{math.floor(duration_sec/60)}m:{duration_sec%60}s'
+        chapter['text'] = f'{chapter_index}Q'
+        chapter_index += 1
+        chapter['file'] = os.path.basename(mts)
         game['chapters'].append(chapter)
         last_mtime = mtime
         mts_index += 1
