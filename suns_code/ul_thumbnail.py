@@ -10,11 +10,20 @@ from PIL import Image, ImageDraw, ImageFont
 
 dirname = os.path.dirname
 FONT_PATH = os.path.join(dirname(dirname(__file__)), 'font/Let_s_go_Digital_Regular.ttf')
-FONT_SIZE = 180
+FONT_SIZE = 100
 # FONT_COLOR = '#ffffff'
 FONT_COLOR = '#ffd700'
-OFFSET_X = 80
-OFFSET_Y = 300
+OFFSET_X = 140
+OFFSET_Y = 160
+IMAGE_WIDTH=1280
+IMAGE_HEIGHT=720
+
+def pillar_box(photo: Image):
+    new_width = photo.width * IMAGE_HEIGHT // photo.height 
+    new_image = Image.new('RGBA', (IMAGE_WIDTH, IMAGE_HEIGHT), (0,0,0))
+    offset = (IMAGE_WIDTH - new_width)//2 
+    new_image.paste(photo.resize((new_width,IMAGE_HEIGHT)), (offset,0))
+    return new_image
 
 # [API仕様]
 # 引数: 画像加工したいディレクトリパス
@@ -41,18 +50,29 @@ def create_thumbnail(target):
         shutil.copy2(src_path, dst_path)
         return
 
-    # ファイルオープン
-    photo_image = Image.open(src_path).convert('RGBA')
-    image_size = photo_image.size
-    image_height = photo_image.height
-
     # 描画開始
-    draw_image = Image.new('RGBA',image_size)
+    draw_image = Image.new('RGBA',(IMAGE_WIDTH, IMAGE_HEIGHT))
     draw = ImageDraw.Draw(draw_image)
     font = ImageFont.truetype(FONT_PATH, FONT_SIZE)
 
+    # 画像ファイル
+    photo_image = Image.open(src_path).convert('RGBA')
+    ratio_a = IMAGE_WIDTH/IMAGE_HEIGHT
+    ratio_b = photo_image.width/photo_image.height
+    if photo_image.width < IMAGE_WIDTH or photo_image.height < IMAGE_HEIGHT:
+        raise NotImplementedError()
+    if ratio_a == ratio_b:  
+        # アスペクト比が同一ならリサイズのみ
+        photo_image = photo_image.resize((IMAGE_WIDTH,IMAGE_HEIGHT))
+    elif ratio_a > ratio_b:
+        # 逆レターボックス
+        photo_image = pillar_box(photo_image)
+    else:
+        # レターボックス
+        raise NotImplementedError()
+
     ## ボックス
-    bbox = draw.textbbox((OFFSET_X, image_height - OFFSET_Y),
+    bbox = draw.textbbox((OFFSET_X, IMAGE_HEIGHT- OFFSET_Y),
                          info['score'], 
                          font=font, 
                          spacing=4,
@@ -66,7 +86,7 @@ def create_thumbnail(target):
         # radius=20,
 
     # テキスト
-    draw.text((OFFSET_X, image_height-OFFSET_Y),    # 座標
+    draw.text((OFFSET_X, IMAGE_HEIGHT-OFFSET_Y),    # 座標
             info['score'],            # 描画するテキストタイトル
             FONT_COLOR,
             font=font,       # フォント設定
@@ -76,9 +96,9 @@ def create_thumbnail(target):
             )
 
     # 合成
-    output_image = Image.alpha_composite(photo_image,draw_image)
+    output_image = Image.alpha_composite(photo_image, draw_image)
     output_image = output_image.convert('RGB')
-    output_image.save(dst_path, quality = 95)
+    output_image.save(dst_path, quality = 100)
 
 
 # テストコード
@@ -91,4 +111,3 @@ if __name__ == "__main__":
         raise FileNotFoundError (errno.ENOENT, os.strerror(errno.ENOENT), target)
 
     create_thumbnail(target)
-    print(args)
