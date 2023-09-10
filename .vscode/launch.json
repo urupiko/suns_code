@@ -14,9 +14,13 @@
                 "/Volumes/JVCCAM_SD/PRIVATE/AVCHD/BDMV/STREAM",
                 "./data",
                 "2"
+
                 // main.py
                 // "./data",
                 // "upload"
+
+                // ul_thumbnail.py
+                // "./data"
             ]
         }
     ]
