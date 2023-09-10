@@ -9,11 +9,14 @@
             "console": "internalConsole",
             "justMyCode": true,
             "args": [
-                // "/Users/uruc/Desktop/w/suns/testdir",
-                // "upload"
-                "/Users/uruc/Desktop/w/suns/copydir",
-                "/Users/uruc/Desktop/w/suns/testdir",
+                // setup.py
+                // "--mode=nocopy",
+                "/Volumes/JVCCAM_SD/PRIVATE/AVCHD/BDMV/STREAM",
+                "./data",
                 "2"
+                // main.py
+                // "./data",
+                // "upload"
             ]
         }
     ]
