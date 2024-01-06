@@ -22,7 +22,7 @@ def concat_video(game, gamedir, outfile_path):
 
     # 連結対象動画ファイルリスト作成
     listfile_path = os.path.join(gamedir, 'mtslist.txt').replace(os.path.sep, '/')
-    pattern = ".*\.(mp4|mts)"
+    pattern = ".*\.(mp4|mts|mov)"
     mtslist = [gamedir + '/'+ f for f in os.listdir(gamedir) if re.search(pattern, f, re.IGNORECASE)] # 大小文字無視
     mtslist.sort()
 
@@ -115,3 +115,11 @@ def add_telop(filepath, text):
         print(result)
 
     return new_file
+
+def vflip_video(source_path, target_path):
+    subprocess.run([ffmpeg_dir + 'ffmpeg', '-i', f'{source_path}', '-crf', '21', '-vf', 'vflip',  f'{target_path}'])
+    pass
+
+def reencode_video(source_path, target_path):
+    subprocess.run([ffmpeg_dir + 'ffmpeg', '-i', f'{source_path}', '-crf', '21', '-r', '29.97',  f'{target_path}'])
+    pass
