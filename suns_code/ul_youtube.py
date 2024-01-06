@@ -12,6 +12,7 @@ from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
+from google.auth.exceptions import RefreshError
 
 httplib2.RETRIES = 1
 MAX_RETRIES = 10
@@ -25,7 +26,8 @@ RETRIABLE_EXCEPTIONS = (httplib2.HttpLib2Error,
                         http.client.ResponseNotReady,
                         http.client.BadStatusLine)
 RETRIABLE_STATUS_CODES = [500, 502, 503, 504]
-YOUTUBE_UPLOAD_SCOPE = ["https://www.googleapis.com/auth/youtube.upload", "https://www.googleapis.com/auth/youtubepartner"]
+YOUTUBE_UPLOAD_SCOPE = ["https://www.googleapis.com/auth/youtube.upload",
+                        "https://www.googleapis.com/auth/youtubepartner"]
 YOUTUBE_API_SERVICE_NAME = "youtube"
 YOUTUBE_API_VERSION = "v3"
 
@@ -39,7 +41,12 @@ def get_authenticated_service():
 
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
+            try:
+                creds.refresh(Request())
+            except RefreshError as e:
+                # リフレッシュ失敗だと例外はいて死ぬっぽいので作り直し
+                print('トークンの更新に失敗しました: ', e)
+                os.remove('token.pickle')
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
                 config.CLIENT_SECRETS_FILE, YOUTUBE_UPLOAD_SCOPE)
@@ -71,7 +78,8 @@ def initialize_upload(youtube, options):
     insert_request = youtube.videos().insert(
         part=",".join(body.keys()),
         body=body,
-        media_body=MediaFileUpload(options['file'], chunksize=-1, resumable=True)
+        media_body=MediaFileUpload(
+            options['file'], chunksize=-1, resumable=True)
     )
 
     video_id = resumable_upload(insert_request)
@@ -89,8 +97,8 @@ def initialize_upload(youtube, options):
                 }
             }
         )
-        response = insert_request.execute()
-    
+        insert_request.execute()
+
     return video_id
 
 
@@ -120,12 +128,13 @@ def resumable_upload(insert_request):
             print(error)
             retry += 1
             if retry > MAX_RETRIES:
-              exit("No longer attempting to retry.")
+                exit("No longer attempting to retry.")
             max_sleep = 2 ** retry
             sleep_seconds = random.random() * max_sleep
             print("Sleeping %f seconds and then retrying..." % sleep_seconds)
             time.sleep(sleep_seconds)
     return id
+
 
 def upload_video(options):
     if not os.path.exists(options['file']):
@@ -138,6 +147,7 @@ def upload_video(options):
         print("An HTTP error %d occurred:\n%s" % (e.resp.status, e.content))
 
     return video_id
+
 
 def upload_thumbnail(target):
     infofile = os.path.join(target, 'info.json')
