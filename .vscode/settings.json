@@ -1,0 +1,9 @@
+{
+    "autopep8.args": [
+        "--max-line-length",
+        "250"
+    ],
+    "flake8.args": [
+        "--max-line-length=250"
+    ]
+}

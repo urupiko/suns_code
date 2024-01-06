@@ -34,7 +34,7 @@ meta['date'] = f"{datetime.date.today().month}/{datetime.date.today().day}"
 meta['venue'] = "体育館"
 meta['games'] = []
 
-pattern = ".*\.(mp4|mts)"
+pattern = ".*\.(mp4|mts|mov)"
 mtslist = [source + '/'+ f for f in os.listdir(source) if re.search(pattern, f, re.IGNORECASE)] # 大小文字無視
 mtslist.sort()
 mts_index = 0
