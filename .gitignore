@@ -1,5 +1,7 @@
 __pycache__
-data
+
+/data*/
+/temp*/
 
 config.py
 .DS_Store
