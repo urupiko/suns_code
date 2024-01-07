@@ -30,11 +30,16 @@ def concat_video(game, gamedir, outfile_path):
     chapter_dict = {}
     if 'chapters' in game :
         for chapter in game['chapters']:
-            original_mts = gamedir+'/'+chapter['file']
             # [封印!] テロップ追加動画を作成する => テロップは作れたが、無圧縮で連結ができないので諦める。やるなら全部エンコード
+            # original_mts = gamedir+'/'+chapter['file']
             # telopped_mts = add_telop(original_mts, chapter['text'])
             # mtslist = [s.replace(original_mts,telopped_mts) for s in mtslist]
             # chapter_dict[telopped_mts] = chapter['text']
+
+            # キーチャプター指定のみチャプター対象辞書に追加
+            if 'is_key' in chapter:
+                if chapter['is_key'] is False:
+                    continue
             chapter_dict[chapter['file']] = chapter['text']
 
     with open(listfile_path, 'w', encoding='utf-8' ) as f:
