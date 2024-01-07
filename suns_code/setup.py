@@ -41,6 +41,7 @@ mts_index = 0
 
 for i in range(1, args.num_games+1):
     game = {}
+    game['enabled'] = True
     game['dirname'] = f"game{i}"
     game['friend'] = config.FRIEND_TEAM_NAME
     game['opponent'] = "対戦チーム名"
@@ -66,11 +67,12 @@ for i in range(1, args.num_games+1):
         # チャプター情報を記録
         chapter = {}
         dt = datetime.datetime.fromtimestamp(mtime)
-        chapter['mtime'] = dt.strftime('%Y-%m-%d %H:%M:%S')
+        chapter['is_key'] = False
+        chapter['text'] = f'{chapter_index}Q'
         chapter['at'] = f'{math.floor(sum_duration/60)}m:{sum_duration%60}s'
         sum_duration += duration_sec
         chapter['duration'] = f'{math.floor(duration_sec/60)}m:{duration_sec%60}s'
-        chapter['text'] = f'{chapter_index}Q'
+        chapter['mtime'] = dt.strftime('%Y-%m-%d %H:%M:%S')
         chapter_index += 1
         chapter['file'] = os.path.basename(mts)
         game['chapters'].append(chapter)
