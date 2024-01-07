@@ -35,7 +35,7 @@ def create_thumbnail(target):
 
     info_path = os.path.join(target, 'info.json')
     if not os.path.isfile(info_path):
-        print(info_path + ' is not found. skipped creating thumbnail.')
+        print('skipped: not found '+ info_path)
         return
     with open(info_path, encoding='utf-8') as f:
         info = json.load(f)
@@ -48,6 +48,7 @@ def create_thumbnail(target):
     # スコアが存在しない場合は、コピーして終了
     if not 'score' in info:
         shutil.copy2(src_path, dst_path)
+        print('copied: ' + dst_path)
         return
 
     # 描画開始
@@ -83,7 +84,7 @@ def create_thumbnail(target):
         fill = (0, 0, 0, 150)
     )
     # draw.rounded_rectangle(
-        # radius=20,
+    #   radius=20,
 
     # テキスト
     draw.text((OFFSET_X, IMAGE_HEIGHT-OFFSET_Y),    # 座標
@@ -100,6 +101,7 @@ def create_thumbnail(target):
     output_image = output_image.convert('RGB')
     output_image.save(dst_path, quality = 100)
 
+    print('created: ' + dst_path)
 
 # テストコード
 if __name__ == "__main__":
