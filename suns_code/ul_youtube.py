@@ -46,8 +46,11 @@ def get_authenticated_service():
             except RefreshError as e:
                 # リフレッシュ失敗だと例外はいて死ぬっぽいので作り直し
                 print('トークンの更新に失敗しました: ', e)
-                os.remove('token.pickle')
+                creds = None
         else:
+            creds = None
+        if creds is None:
+            print('クレデンシャルを作成します')
             flow = InstalledAppFlow.from_client_secrets_file(
                 config.CLIENT_SECRETS_FILE, YOUTUBE_UPLOAD_SCOPE)
             creds = flow.run_local_server(port=0)
