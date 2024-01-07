@@ -19,13 +19,13 @@ parser.add_argument("--mode", type=str, help="{none}|nocopy")
 args = parser.parse_args()
 
 source = args.src_dir
-target = args.dst_dir #'20210606'
+target = args.dst_dir  # '20210606'
 mode = args.mode
 
 os.makedirs(target, exist_ok=True)
 
 metafile = os.path.join(target, 'meta.json')
-logging.info("metafile : " +  metafile)
+logging.info("metafile : " + metafile)
 
 # 全体メタ情報
 meta = {}
@@ -35,7 +35,7 @@ meta['venue'] = "体育館"
 meta['games'] = []
 
 pattern = ".*\.(mp4|mts|mov)"
-mtslist = [source + '/'+ f for f in os.listdir(source) if re.search(pattern, f, re.IGNORECASE)] # 大小文字無視
+mtslist = [source + '/' + f for f in os.listdir(source) if re.search(pattern, f, re.IGNORECASE)]  # 大小文字無視
 mtslist.sort()
 mts_index = 0
 
