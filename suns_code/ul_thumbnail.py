@@ -63,7 +63,15 @@ def create_thumbnail(target):
     ratio_a = IMAGE_WIDTH/IMAGE_HEIGHT
     ratio_b = photo_image.width/photo_image.height
     if photo_image.width < IMAGE_WIDTH or photo_image.height < IMAGE_HEIGHT:
-        raise NotImplementedError()
+        # アスペクト比を維持したままリサイズするための比率を計算
+        width_ratio = IMAGE_WIDTH / photo_image.width
+        height_ratio = IMAGE_HEIGHT / photo_image.height
+        resize_ratio = min(width_ratio, height_ratio)
+        
+        # リサイズ後の幅と高さを計算
+        new_width = int(photo_image.width * resize_ratio)
+        new_height = int(photo_image.height * resize_ratio)
+        photo_image = photo_image.resize((new_width, new_height), Image.LANCZOS)
     if ratio_a == ratio_b:
         # アスペクト比が同一ならリサイズのみ
         photo_image = photo_image.resize((IMAGE_WIDTH, IMAGE_HEIGHT))
