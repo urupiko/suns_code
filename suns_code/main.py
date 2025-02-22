@@ -33,13 +33,14 @@ for game in meta['games']:
     chapterfile = os.path.join(gamedir, 'chapter.txt')
 
     outfile_path = os.path.join(basedir, game['dirname']+'.mp4')
-    title = meta['date'] + ' ' + meta['title'] + ' ' + game['opponent']
+    title = meta['date'][5:] + ' ' + meta['title'] + ' ' + game['opponent']
     description = ''
 
     if mode == 'conv':
         desc_list = ul_ffmpeg.concat_video(game,
                                            gamedir,
                                            outfile_path)
+        description += meta['date'] + '\n'
         if 'score' in game:
             description += game['friend'] + ' ' + game['score'] + ' ' + game['opponent'] + '\n'
         if 'venue' in meta:
