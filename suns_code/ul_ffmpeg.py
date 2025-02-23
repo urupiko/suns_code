@@ -38,11 +38,9 @@ def concat_video(game, gamedir, outfile_path):
             # mtslist = [s.replace(original_mts,telopped_mts) for s in mtslist]
             # chapter_dict[telopped_mts] = chapter['text']
 
-            # キーチャプター指定のみチャプター対象辞書に追加
-            if 'is_key' in chapter:
-                if chapter['is_key'] is False:
-                    continue
-            chapter_dict[chapter['file']] = chapter['text']
+            # キーチャプター指定時のみチャプター対象辞書に追加
+            if chapter.get('is_key') is True:
+                chapter_dict[chapter['file']] = chapter['text']
 
     with open(listfile_path, 'w', encoding='utf-8') as f:
         mtss = list(map(lambda mts: 'file '+mts.replace(os.path.sep, '/'), mtslist))

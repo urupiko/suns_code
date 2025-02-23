@@ -67,7 +67,7 @@ for i in range(1, args.num_games+1):
         # チャプター情報を記録
         chapter = {}
         dt = datetime.datetime.fromtimestamp(mtime)
-        chapter['is_key'] = False
+        chapter['is_key'] = True
         chapter['text'] = f'{chapter_index}Q'
         chapter['at'] = f'{math.floor(sum_duration/60)}m:{sum_duration%60}s'
         sum_duration += duration_sec
