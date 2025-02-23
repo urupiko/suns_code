@@ -30,7 +30,7 @@ logging.info("metafile : " + metafile)
 # 全体メタ情報
 meta = {}
 meta['title'] = "大会名"
-meta['date'] = f"{datetime.date.today().month}/{datetime.date.today().day}"
+meta['date'] = f"{datetime.date.today().year}/{datetime.date.today().month}/{datetime.date.today().day}"
 meta['venue'] = "体育館"
 meta['games'] = []
 
