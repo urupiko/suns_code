@@ -14,7 +14,6 @@ import logging
 parser = argparse.ArgumentParser()
 parser.add_argument("src_dir", type=str, help="Source directroy e.g. sdcard")
 parser.add_argument("dst_dir", type=str, help="Target directory e.g. 20230823")
-parser.add_argument("num_games", type=int, help="Number of games")
 parser.add_argument("--mode", type=str, help="{none}|nocopy")
 args = parser.parse_args()
 
@@ -39,7 +38,7 @@ mtslist = [source + '/' + f for f in os.listdir(source) if re.search(pattern, f,
 mtslist.sort()
 mts_index = 0
 
-for i in range(1, args.num_games+1):
+for i in range(1, len(mtslist)):
     game = {}
     game['enabled'] = True
     game['dirname'] = f"game{i}"
@@ -88,8 +87,10 @@ for i in range(1, args.num_games+1):
         os.makedirs(gamedir, exist_ok=True)
         print(f"copying {mts} to {gamedir}")
         shutil.copy2(mts, gamedir)
-
+    
     meta['games'].append(game)
+    if mts_index == len(mtslist):
+        break
 
 print(meta)
 
