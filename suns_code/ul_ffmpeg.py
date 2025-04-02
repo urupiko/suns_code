@@ -18,6 +18,14 @@ def get_length(filename):
     return float(result.stdout)
 
 
+def seconds_to_youtube_timestamp(seconds: int) -> str:
+    hours, remainder = divmod(seconds, 3600)
+    minutes, seconds = divmod(remainder, 60)
+    if hours > 0:
+        return f"{hours}:{minutes:02}:{seconds:02}"  # `hh:mm:ss`
+    return f"{minutes}:{seconds:02}"  # `mm:ss` (1時間未満の場合)
+
+
 def concat_video(game, gamedir, outfile_path):
     segment = 1
     sum_duration = 0.0
@@ -56,11 +64,11 @@ def concat_video(game, gamedir, outfile_path):
         # チャプターが指定されていた場合は指定ファイルだけdesc_listに書き込む
         if 'chapters' in game:
             if os.path.basename(mts) in chapter_dict:
-                desc_list.append(str(int(td.seconds/60)) + ":" + str(td.seconds % 60).zfill(2) + " " + chapter_dict[os.path.basename(mts)])
+                desc_list.append(seconds_to_youtube_timestamp(td.seconds) + " " + chapter_dict[os.path.basename(mts)])
             else:
                 continue
         else:
-            desc_list.append(str(int(td.seconds/60)) + ":" + str(td.seconds % 60).zfill(2) + " " + str(segment) + "Q")
+            desc_list.append(seconds_to_youtube_timestamp(td.seconds) + " " + str(segment) + "Q")
         segment += 1
 
     # outfile_path = os.path.join(basedir, game['dirname']+'.mts')
